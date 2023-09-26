@@ -3,7 +3,10 @@ package com.example.pokedex;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,7 +14,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.LinkedList;
 import java.util.*;
@@ -24,22 +30,29 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v){
             try {
+                resetTextColors();
                 natnum = Integer.valueOf(natnumET.getText().toString());
                 name = nameET.getText().toString();
                 species = speciesET.getText().toString();
+                genderRB = findViewById(genderRG.getCheckedRadioButtonId());
                 gender = genderRB.getText().toString();
-                heightStr = heightET.getText().toString();
-                weightStr = weightET.getText().toString();
                 level = Integer.valueOf(levelSP.getSelectedItem().toString());
+                levelStr = levelSP.getSelectedItem().toString();
+
+                heightStr = heightET.getText().toString();
+                System.out.println("Height: " + heightStr + ".");
+
+                weightStr = weightET.getText().toString();
                 hp = Integer.valueOf(hpET.getText().toString());
                 attack = Integer.valueOf(attackET.getText().toString());
                 defense = Integer.valueOf(defenseET.getText().toString());
-                if(checkValues()){
-                    submitEntry();
-                }
+
             }
             catch(Exception e){
-                errorMessage();
+                // Do nothing because toasts will be shown from checkValues() function
+            }
+            if(checkValues()){
+                submitEntry();
             }
         }
     };
@@ -50,10 +63,13 @@ public class MainActivity extends AppCompatActivity {
             natnumET.setText(R.string._896);
             nameET.setText(R.string.glastrier);
             speciesET.setText(R.string.wild_horse_pok_mon);
+            resetTextColors();
 
-            View noneView = genderRG.getChildAt(2);
-            RadioButton noneButton = (RadioButton)noneView;
-            noneButton.setChecked(true);
+            for(int i = 0; i < 3; i++) {
+                View noneView = genderRG.getChildAt(i);
+                RadioButton noneButton = (RadioButton) noneView;
+                noneButton.setChecked(false);
+            }
 
             heightET.setText(R.string._2_2_m);
             weightET.setText(R.string._800_0_kg);
@@ -62,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             attackET.setText(R.string._0);
             defenseET.setText(R.string._0);
         }
+
     };
 
     EditText natnumET;
@@ -82,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     String weightStr;
     Spinner levelSP;
     int level;
+    String levelStr;
     EditText hpET;
     int hp;
     EditText attackET;
@@ -90,6 +108,19 @@ public class MainActivity extends AppCompatActivity {
     int defense;
     Button submitBT;
     Button resetBT;
+
+    TextView natnumTV;
+    TextView nameTV;
+    TextView speciesTV;
+    TextView genderTV;
+    TextView heightTV;
+    TextView weightTV;
+    TextView levelTV;
+    TextView hpTV;
+    TextView attackTV;
+    TextView defenseTV;
+    LinkedList<TextView> TVlist = new LinkedList<TextView>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,26 +131,102 @@ public class MainActivity extends AppCompatActivity {
         nameET = findViewById(R.id.nameET);
         speciesET = findViewById(R.id.speciesET);
         genderRG = findViewById(R.id.genderRG);
-        genderRB = findViewById(genderRG.getCheckedRadioButtonId());
         heightET = findViewById(R.id.heightET);
         weightET = findViewById(R.id.weightET);
         levelSP = findViewById(R.id.levelSP);
         hpET = findViewById(R.id.hpET);
         attackET = findViewById(R.id.attackET);
         defenseET = findViewById(R.id.defenseET);
+
+        natnumTV = findViewById(R.id.natnumTV);
+        nameTV = findViewById(R.id.nameTV);
+        speciesTV = findViewById(R.id.speciesTV);
+        genderTV = findViewById(R.id.genderTV);
+        heightTV = findViewById(R.id.heightTV);
+        weightTV = findViewById(R.id.weightTV);
+        levelTV = findViewById(R.id.levelTV);
+        hpTV = findViewById(R.id.hpTV);
+        attackTV = findViewById(R.id.attackTV);
+        defenseTV = findViewById(R.id.defenseTV);
+
+        TVlist.add(natnumTV);
+        TVlist.add(nameTV);
+        TVlist.add(speciesTV);
+        TVlist.add(genderTV);
+        TVlist.add(heightTV);
+        TVlist.add(weightTV);
+        TVlist.add(levelTV);
+        TVlist.add(hpTV);
+        TVlist.add(attackTV);
+        TVlist.add(defenseTV);
+
         submitBT = findViewById(R.id.submitBT);
         resetBT = findViewById(R.id.resetBT);
 
         resetBT.setOnClickListener(resetAllEntries);
         submitBT.setOnClickListener(submitListener);
 
-        String[] list = new String[100];
-        for(int i = 0; i < 100; i++){
-            list[i] = String.valueOf(i+1);
+        String[] list = new String[51];
+        list[0] = " ";
+        for(int i = 1; i < 51; i++){
+            list[i] = String.valueOf(i);
         }
         ArrayAdapter<String> levelSPAdapter = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_item, list);
-        levelSPAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         levelSP.setAdapter(levelSPAdapter);
+
+        heightET.addTextChangedListener(new TextWatcher() {
+            boolean addedSuffixHeight = false;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+                String text = heightET.getText().toString();
+                if(!text.endsWith(" m")){
+                    if(text.contains("m")){
+                        text = text.replaceAll("m", "");
+                    }
+
+                    heightET.setText(text.concat(" m"));
+                    heightET.setSelection(text.length());
+                    addedSuffixHeight = true;
+
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s){
+                if(s.length() == 0){
+                    addedSuffixHeight = false;
+                }
+            }
+        });
+        weightET.addTextChangedListener(new TextWatcher() {
+            boolean addedSuffixWeight = false;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+                String text = weightET.getText().toString();
+                if(!text.endsWith(" kg")){
+                    if(text.contains("k")){
+                        text = text.replaceAll("k", "");
+                    }
+                    if(text.contains("g")){
+                        text = text.replaceAll("g", "");
+                    }
+
+                    weightET.setText(text.concat(" kg"));
+                    weightET.setSelection(text.length());
+                    addedSuffixWeight = true;
+
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s){
+                if(s.length() == 0){
+                    addedSuffixWeight = false;
+                }
+            }
+        });
     }
 
     private boolean checkValues(){
@@ -131,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         if(natnum > 1010 || natnum < 1){
             success = false;
             reasons.add("National Number not between 1 and 1010.");
+            natnumTV.setTextColor(Color.RED);
         }
 
         for(int i=0;i<allowedChars.length();i++) // makes an array of allowed characters
@@ -144,10 +252,21 @@ public class MainActivity extends AppCompatActivity {
                 success = false;
                 badname = true;
                 reasons.add("Invalid character in Name.");
+                nameTV.setTextColor(Color.RED);
             }
             if(i > 1 && name.charAt(i-1) == ' '){
-                name = name.substring(i-1, i).toUpperCase() + name.substring(i);
+                name = name.substring(0, i-1) + name.substring(i-1, i).toUpperCase() + name.substring(i);
             }
+        }
+        if(name.length() < 3){
+            success = false;
+            reasons.add("Name too short.");
+            nameTV.setTextColor(Color.RED);
+        }
+        if(name.length() > 12){
+            success = false;
+            reasons.add("Name too long.");
+            nameTV.setTextColor(Color.RED);
         }
         name = name.substring(0,1).toUpperCase() + name.substring(1); // capitalize first letter in name
 
@@ -158,12 +277,80 @@ public class MainActivity extends AppCompatActivity {
                 success = false;
                 badspecies = true;
                 reasons.add("Invalid character in Species.");
+                speciesTV.setTextColor(Color.RED);
             }
             if(i > 1 && species.charAt(i-1) == ' '){
-                species = species.substring(i-1, i).toUpperCase() + species.substring(i);
+                species = species.substring(0, i-1) + species.substring(i-1, i).toUpperCase() + species.substring(i);
             }
         }
         species = species.substring(0,1).toUpperCase() + species.substring(1); // capitalize first letter in species
+
+        if(genderRB == null || genderRB.isChecked() == false) {
+            success = false;
+            reasons.add("No gender selected.");
+            genderTV.setTextColor(Color.RED);
+        }
+
+        if(height < 0.3){
+            success = false;
+            reasons.add("Height too short.");
+            heightTV.setTextColor(Color.RED);
+        }
+        if(height > 19.99){
+            success = false;
+            reasons.add("Height too tall.");
+            heightTV.setTextColor(Color.RED);
+        }
+
+        if(weight < 0.1){
+            success = false;
+            reasons.add("Weight too light.");
+            weightTV.setTextColor(Color.RED);
+        }
+        if(weight > 820){
+            success = false;
+            reasons.add("Weight too heavy.");
+            weightTV.setTextColor(Color.RED);
+        }
+
+        if(levelSP.getSelectedItem() == " "){
+            success = false;
+            reasons.add("Level not selected.");
+            levelTV.setTextColor(Color.RED);
+        }
+
+        if(hp < 1){
+            success = false;
+            reasons.add("HP too low.");
+            hpTV.setTextColor(Color.RED);
+        }
+        if(hp > 362){
+            success = false;
+            reasons.add("HP too high.");
+            hpTV.setTextColor(Color.RED);
+        }
+
+        if(attack < 5){
+            success = false;
+            reasons.add("Attack too low.");
+            attackTV.setTextColor(Color.RED);
+        }
+        if(attack > 526){
+            success = false;
+            reasons.add("Attack too high.");
+            attackTV.setTextColor(Color.RED);
+        }
+
+        if(defense < 5){
+            success = false;
+            reasons.add("Defense too low.");
+            defenseTV.setTextColor(Color.RED);
+        }
+        if(defense > 614){
+            success = false;
+            reasons.add("Defense too high.");
+            defenseTV.setTextColor(Color.RED);
+        }
 
         if(!success){
             String toastText = "";
@@ -173,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
         }
-
         return success;
     }
 
@@ -183,5 +369,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void errorMessage(){
         Toast.makeText(this, "Error: Make sure all fields are filled out.", Toast.LENGTH_LONG).show();
+    }
+
+    private void resetTextColors() {
+        for (int i = 0; i < TVlist.size(); i++) {
+            TextView tv = TVlist.get(i);
+            tv.setTextColor(Color.BLACK);
+        }
     }
 }

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="412dp"
+        android:layout_height="850dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/poke_tracker"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_new_catch"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/natnumTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/national_number" />
+
+        <EditText
+            android:id="@+id/natnumET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            tools:text="@string/_896" />
+
+        <TextView
+            android:id="@+id/nameTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name" />
+
+        <EditText
+            android:id="@+id/nameET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/glastrier" />
+
+        <TextView
+            android:id="@+id/speciesTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/species" />
+
+        <EditText
+            android:id="@+id/speciesET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/wild_horse_pok_mon" />
+
+        <TextView
+            android:id="@+id/genderTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/gender" />
+
+        <RadioGroup
+            android:id="@+id/genderRG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/maleRB"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/femaleRB"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/female" />
+
+            <RadioButton
+                android:id="@+id/noneRB"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/none" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/heightTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/height" />
+
+        <EditText
+            android:id="@+id/heightET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            tools:text="@string/_2_2_m" />
+
+        <TextView
+            android:id="@+id/weightTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/weight" />
+
+        <EditText
+            android:id="@+id/weightET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            tools:text="@string/_800_0_kg" />
+
+        <TextView
+            android:id="@+id/levelTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/level" />
+
+        <Spinner
+            android:id="@+id/levelSP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/base_stats"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/hpTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hp" />
+
+        <EditText
+            android:id="@+id/hpET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@string/_0" />
+
+        <TextView
+            android:id="@+id/attackTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/attack" />
+
+        <EditText
+            android:id="@+id/attackET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@string/_0" />
+
+        <TextView
+            android:id="@+id/defenseTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/defense" />
+
+        <EditText
+            android:id="@+id/defenseET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@string/_0" />
+
+        <Button
+            android:id="@+id/resetBT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reset" />
+
+        <Button
+            android:id="@+id/submitBT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/submit" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

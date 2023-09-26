@@ -2,7 +2,6 @@ package com.example.pokedex;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,8 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.LinkedList;
 import java.util.*;
 
@@ -29,28 +26,48 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v){
+            resetTextColors();
             try {
-                resetTextColors();
                 natnum = Integer.valueOf(natnumET.getText().toString());
+            }catch(Exception e) {}
+            try {
                 name = nameET.getText().toString();
+            }
+            catch(Exception e){}
+            try{
                 species = speciesET.getText().toString();
+            }catch(Exception e) {}
+            try {
                 genderRB = findViewById(genderRG.getCheckedRadioButtonId());
                 gender = genderRB.getText().toString();
+            }catch(Exception e) {}
+            try {
                 level = Integer.valueOf(levelSP.getSelectedItem().toString());
                 levelStr = levelSP.getSelectedItem().toString();
-
+            }catch(Exception e) {}
+            try {
                 heightStr = heightET.getText().toString();
-                System.out.println("Height: " + heightStr + ".");
-
+                String txt = heightStr.replaceAll("m", "");
+                txt = txt.replaceAll(" ", "");
+                height = Float.parseFloat(txt);
+            }catch(Exception e) {}
+            try {
                 weightStr = weightET.getText().toString();
+                String txt = weightStr.replaceAll("kg", "");
+                txt = txt.replaceAll(" ", "");
+                weight = Float.parseFloat(txt);
+            }catch(Exception e) {}
+            try {
                 hp = Integer.valueOf(hpET.getText().toString());
+            }catch(Exception e) {}
+            try {
                 attack = Integer.valueOf(attackET.getText().toString());
+            }catch(Exception e) {}
+            try {
                 defense = Integer.valueOf(defenseET.getText().toString());
-
             }
-            catch(Exception e){
+            catch(Exception e){}
                 // Do nothing because toasts will be shown from checkValues() function
-            }
             if(checkValues()){
                 submitEntry();
             }
@@ -92,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
 
     String gender;
     EditText heightET;
-    double height;
+    float height;
     String heightStr;
     EditText weightET;
-    double weight;
+    float weight;
     String weightStr;
     Spinner levelSP;
     int level;
@@ -253,9 +270,6 @@ public class MainActivity extends AppCompatActivity {
                 badname = true;
                 reasons.add("Invalid character in Name.");
                 nameTV.setTextColor(Color.RED);
-            }
-            if(i > 1 && name.charAt(i-1) == ' '){
-                name = name.substring(0, i-1) + name.substring(i-1, i).toUpperCase() + name.substring(i);
             }
         }
         if(name.length() < 3){

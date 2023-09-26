@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
     int defense;
     Button submitBT;
     Button resetBT;
-
     TextView natnumTV;
     TextView nameTV;
     TextView speciesTV;
@@ -190,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
         }
         ArrayAdapter<String> levelSPAdapter = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_item, list);
         levelSP.setAdapter(levelSPAdapter);
-
         heightET.addTextChangedListener(new TextWatcher() {
             boolean addedSuffixHeight = false;
             @Override
@@ -198,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count){
                 String text = heightET.getText().toString();
+                heightET.addTextChangedListener(this);
                 if(!text.endsWith(" m")){
                     if(text.contains("m")){
                         text = text.replaceAll("m", "");
@@ -206,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                     heightET.setText(text.concat(" m"));
                     heightET.setSelection(text.length());
                     addedSuffixHeight = true;
-
+                    heightET.removeTextChangedListener(this);
                 }
             }
             @Override
@@ -222,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count){
+                weightET.removeTextChangedListener(this);
                 String text = weightET.getText().toString();
                 if(!text.endsWith(" kg")){
                     if(text.contains("k")){
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                     weightET.setText(text.concat(" kg"));
                     weightET.setSelection(text.length());
                     addedSuffixWeight = true;
-
+                    weightET.addTextChangedListener(this);
                 }
             }
             @Override

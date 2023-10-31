@@ -2,14 +2,19 @@ package com.example.pokedex;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -21,6 +26,32 @@ import java.util.*;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    LinkedList<Pokemon> pokemonList;
+
+
+
+
+    View.OnClickListener seeEntries = new View.OnClickListener(){
+        @Override
+        public void onClick(View v){
+
+            ArrayList<String> pokestrarr = new ArrayList<>();
+
+            if(pokemonList != null){
+                for (int i = 0; i < pokemonList.size() - 1; i++) {
+                    pokestrarr.add(pokemonList.get(i).toString());
+                }
+
+                Intent intent = new Intent(getApplicationContext(), ListOfEntries.class); // not sure if this will work
+                intent.putExtra("pokelist", pokestrarr);
+                startActivity(intent);
+            }else{
+                Toast.makeText(getApplicationContext(), "No entries yet.", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
 
     View.OnClickListener submitListener = new View.OnClickListener() {
 
@@ -125,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     int defense;
     Button submitBT;
     Button resetBT;
+    Button pokebutton;
     TextView natnumTV;
     TextView nameTV;
     TextView speciesTV;
@@ -165,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
         attackTV = findViewById(R.id.attackTV);
         defenseTV = findViewById(R.id.defenseTV);
 
+        pokebutton = findViewById(R.id.pokebutton);
+
         TVlist.add(natnumTV);
         TVlist.add(nameTV);
         TVlist.add(speciesTV);
@@ -181,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
         resetBT.setOnClickListener(resetAllEntries);
         submitBT.setOnClickListener(submitListener);
+        pokebutton.setOnClickListener(seeEntries);
 
         String[] list = new String[51];
         list[0] = " ";
@@ -373,6 +408,29 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
+        }else{
+            if(pokemonList == null){
+                pokemonList = new LinkedList<>();
+            }
+            Pokemon p = new Pokemon(natnum, name, species, gender, height, weight, level, hp, attack, defense);
+            if(!pokemonList.contains(p)) { // this does NOT work
+                pokemonList.add(p);
+                ContentValues mNewValues = new ContentValues();
+                mNewValues.put(PokeProvider.COLUMN_1NAME, p.getNatNum());
+                mNewValues.put(PokeProvider.COLUMN_2NAME, p.getName());
+                mNewValues.put(PokeProvider.COLUMN_3NAME, p.getSpecies());
+                mNewValues.put(PokeProvider.COLUMN_4NAME, p.getGender());
+                mNewValues.put(PokeProvider.COLUMN_5NAME, p.getHeight());
+                mNewValues.put(PokeProvider.COLUMN_6NAME, p.getWeight());
+                mNewValues.put(PokeProvider.COLUMN_7NAME, p.getLevel());
+                mNewValues.put(PokeProvider.COLUMN_8NAME, p.getHp());
+                mNewValues.put(PokeProvider.COLUMN_9NAME, p.getAttack());
+                mNewValues.put(PokeProvider.COLUMN_10NAME, p.getDefense());
+                getContentResolver().insert(PokeProvider.contentURI, mNewValues);
+            }else{
+                Toast.makeText(this, "Entry is already in database.", Toast.LENGTH_LONG);
+                success = false;
+            }
         }
         return success;
     }

@@ -23,7 +23,7 @@ public class PokeProvider extends ContentProvider {
     public static final String COLUMN_8NAME = "HP";
     public static final String COLUMN_9NAME = "Attack";
     public static final String COLUMN_10NAME = "Defense";
-    public static final String AUTHORITY = "belmont.poketrackerdb";
+    public static final String AUTHORITY = "belmont.poketracker";
     public static final Uri contentURI = Uri.parse("content://" + AUTHORITY + "/" + DBNAME);
     private MainDatabaseHelper SQLHelper;
     private static String CREATE_DB_QUERY = "CREATE TABLE " + TABLE_NAME +
@@ -32,8 +32,8 @@ public class PokeProvider extends ContentProvider {
             COLUMN_2NAME + " TEXT," +
             COLUMN_3NAME + " TEXT," +
             COLUMN_4NAME + " TEXT," +
-            COLUMN_5NAME + " INTEGER," +
-            COLUMN_6NAME + " INTEGER," +
+            COLUMN_5NAME + " FLOAT," +
+            COLUMN_6NAME + " FLOAT," +
             COLUMN_7NAME + " INTEGER," +
             COLUMN_8NAME + " INTEGER," +
             COLUMN_9NAME + " INTEGER," +
@@ -79,6 +79,7 @@ public class PokeProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         // TODO: Implement this to initialize your content provider on startup.
+        SQLHelper = new MainDatabaseHelper(getContext());
         return false;
     }
 

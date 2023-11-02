@@ -27,7 +27,7 @@ public class PokeProvider extends ContentProvider {
     public static final Uri contentURI = Uri.parse("content://" + AUTHORITY + "/" + DBNAME);
     private MainDatabaseHelper SQLHelper;
     private static String CREATE_DB_QUERY = "CREATE TABLE " + TABLE_NAME +
-            "( _ID INTEGER PRIMARY KEY," +
+            "( _id INTEGER PRIMARY KEY," +
             COLUMN_1NAME + " INTEGER," +
             COLUMN_2NAME + " TEXT," +
             COLUMN_3NAME + " TEXT," +

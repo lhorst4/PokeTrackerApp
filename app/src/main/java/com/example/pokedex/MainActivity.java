@@ -29,26 +29,23 @@ public class MainActivity extends AppCompatActivity {
 
     LinkedList<Pokemon> pokemonList;
 
-
-
-
     View.OnClickListener seeEntries = new View.OnClickListener(){
         @Override
         public void onClick(View v){
 
             ArrayList<String> pokestrarr = new ArrayList<>();
 
-            if(pokemonList != null){
-                for (int i = 0; i < pokemonList.size() - 1; i++) {
-                    pokestrarr.add(pokemonList.get(i).toString());
-                }
+            //if(pokemonList != null){
+            //    for (int i = 0; i < pokemonList.size() - 1; i++) {
+            //        pokestrarr.add(pokemonList.get(i).toString());
+            //    }
 
-                Intent intent = new Intent(getApplicationContext(), ListOfEntries.class); // not sure if this will work
-                intent.putExtra("pokelist", pokestrarr);
+                Intent intent = new Intent(getApplicationContext(), ListOfEntries.class);
+                //intent.putExtra("pokelist", pokestrarr);
                 startActivity(intent);
-            }else{
-                Toast.makeText(getApplicationContext(), "No entries yet.", Toast.LENGTH_LONG).show();
-            }
+//            }else{
+//                Toast.makeText(getApplicationContext(), "No entries yet.", Toast.LENGTH_LONG).show();
+//            }
         }
     };
 
@@ -413,7 +410,39 @@ public class MainActivity extends AppCompatActivity {
                 pokemonList = new LinkedList<>();
             }
             Pokemon p = new Pokemon(natnum, name, species, gender, height, weight, level, hp, attack, defense);
-            if(!pokemonList.contains(p)) { // this does NOT work
+
+            boolean duplicate = false;
+
+            Cursor mCursor = getContentResolver().query(PokeProvider.contentURI, null, null, null, null, null);
+
+            if(mCursor != null) {
+                mCursor.moveToFirst();
+                if (mCursor.getCount() > 0) {
+                    while (mCursor.isAfterLast() == false) {
+                        int a = mCursor.getInt(1);
+                        String b = mCursor.getString(2);
+                        String c = mCursor.getString(3);
+                        String d = mCursor.getString(4);
+                        float e = mCursor.getFloat(5);
+                        float f = mCursor.getFloat(6);
+                        int g = mCursor.getInt(7);
+                        int h = mCursor.getInt(8);
+                        int i = mCursor.getInt(9);
+                        int j = mCursor.getInt(10);
+
+                        if (a == p.getNatNum() && b.equals(p.getName()) && c.equals(p.getSpecies()) && d.equals(p.getGender())
+                                && e == p.getHeight() && f == p.getWeight() && g == p.getLevel() && h == p.getHp() && i == p.getAttack()
+                                && j == p.getDefense()) {
+                            duplicate = true;
+                            break;
+                        }
+                        mCursor.moveToNext();
+                    }
+                }
+            }
+
+
+            if(!duplicate) {
                 pokemonList.add(p);
                 ContentValues mNewValues = new ContentValues();
                 mNewValues.put(PokeProvider.COLUMN_1NAME, p.getNatNum());
@@ -428,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
                 mNewValues.put(PokeProvider.COLUMN_10NAME, p.getDefense());
                 getContentResolver().insert(PokeProvider.contentURI, mNewValues);
             }else{
-                Toast.makeText(this, "Entry is already in database.", Toast.LENGTH_LONG);
+                Toast.makeText(this, "Entry is already in database.", Toast.LENGTH_LONG).show();
                 success = false;
             }
         }
